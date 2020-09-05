@@ -1,11 +1,50 @@
-node {
-    stage('clone') {
-        git 'https://github.com/pavan88/football-api.git'
+pipeline {
+    agent any
+    triggers {
+        pollSCM('*/15 * * * *')
     }
-    stage('build') {
-        sh label: '', script: 'docker build -t football-api .'
+    options { disableConcurrentBuilds() }
+    stages {
+        stage('Permissions') {
+            steps {
+                sh 'chmod 775 *'
+            }
+        }
     }
-        stage('run') {
-    sh label: '', script: 'docker run --name football-api -p8080:8080 -d football-api'
+    stage('Cleanup') {
+            steps {
+                sh 'mvn clean'
+            }
+        }
+
+    stage('Test') {
+            steps {sh 'mvn clean test'}
+    }
+
+    stage('Build') {
+        steps {sh 'mvn clean package'}
+    }
+
+    stage('Build Docker Image') {
+        when { branch "master" }
+            steps {
+                sh '''
+                    docker build --no-cache -t  football-api .
+                    docker tag football-api:latest
+                    docker rmi person:latest
+                '''
+            }
+    }
+    stage('Run the Docker Container') {
+        when { branch "master" }
+        steps {
+            sh '''
+                    docker pull football-api:latest
+                    docker stop football-api
+                    docker rm football-api
+                    docker run -p 9090:9090 --name football-api -t -d football-api
+                    docker rmi -f $(docker images -q --filter dangling=true)
+                '''
+            }
     }
 }
