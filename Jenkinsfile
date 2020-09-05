@@ -30,7 +30,6 @@ pipeline {
         }
 
         stage('Create the Docker Image') {
-            when { branch "master" }
             steps {
                 sh '''
                     docker build --no-cache -t football-api .
@@ -39,7 +38,6 @@ pipeline {
             }
         }
         stage('Run the Docker Container') {
-            when { branch "master" }
             steps {
                 sh '''
                     docker pull football-api
