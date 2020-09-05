@@ -8,8 +8,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties
 public class FootballApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(FootballApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(FootballApiApplication.class, args);
+    }
 
 }

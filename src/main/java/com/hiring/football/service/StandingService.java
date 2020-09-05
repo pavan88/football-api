@@ -24,16 +24,13 @@ import java.util.Map;
 @Slf4j
 public class StandingService {
 
+    private final static String URL = "https://apiv2.apifootball.com/";
     @Autowired
     private RestTemplate restTemplate;
-
     @Autowired
     private AppConfigs appConfigs;
-
     @Autowired
     private ObjectMapper objectMapper;
-
-    private final static String URL = "https://apiv2.apifootball.com/";
 
     /**
      * This method wil return the List of the standing Position for the given league id

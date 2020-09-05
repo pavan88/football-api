@@ -16,7 +16,7 @@ public class FootBallConfiguration {
 
 
     @Bean
-    public ObjectMapper objectMapper(){
+    public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
 

@@ -34,14 +34,11 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 @WebMvcTest(StandingController.class)
 public class StandingControllerTest {
 
+    List<Response> response;
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private StandingService standingService;
-
-    List<Response> response;
-
 
     @Before
     public void beforeEachTestMethod() throws IOException {
