@@ -2,7 +2,7 @@
 pipeline {
     agent any
     triggers {
-        pollSCM('*/15 * * * *')
+        pollSCM('* * * * *')
     }
     options { disableConcurrentBuilds() }
     stages {
@@ -13,7 +13,7 @@ pipeline {
         }
 stage('Cleanup') {
             steps {
-                sh './mvn clean'
+                sh './mvnw clean'
             }
         }
 
@@ -45,7 +45,6 @@ stage('Test') {
             when { branch "master" }
             steps {
                 sh '''
-
                     docker pull football-api
                     docker stop football-api
                     docker rm football-api
