@@ -33,17 +33,15 @@ pipeline {
             steps {
                 sh '''
                     docker build --no-cache -t football-api .
-                    docker rmi person:latest
                 '''
             }
         }
         stage('Run the Docker Container') {
             steps {
                 sh '''
-                    docker pull football-api
                     docker stop football-api
                     docker rm football-api
-                    docker run -p 9090:9090 --name person -t -d football-api
+                    docker run -p 8080:8080 --name football-api -t football-api
                     docker rmi -f $(docker images -q --filter dangling=true)
                 '''
             }
