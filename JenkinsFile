@@ -1,0 +1,11 @@
+node {
+    stage('clone') {
+        git 'https://github.com/pavan88/football-api.git'
+    }
+    stage('build') {
+        sh label: '', script: 'docker build -t football-api .'
+    }
+        stage('run') {
+    sh label: '', script: 'docker run --name football-api -p8080:8080 -d football-api'
+    }
+}
