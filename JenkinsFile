@@ -1,3 +1,4 @@
+#!/usr/bin/env groovy
 pipeline {
     agent any
     triggers {
@@ -10,41 +11,48 @@ pipeline {
                 sh 'chmod 775 *'
             }
         }
-    }
-    stage('Cleanup') {
+stage('Cleanup') {
             steps {
-                sh 'mvn clean'
+                sh './mvn clean'
             }
         }
 
-    stage('Test') {
-            steps {sh 'mvn clean test'}
-    }
-
-    stage('Build') {
-        steps {sh 'mvn clean package'}
-    }
-
-    stage('Build Docker Image') {
-        when { branch "master" }
+stage('Test') {
+            steps {
+                sh './mvnw test'
+            }
+            post {
+                always {
+                    junit 'build/test-results/test/*.xml'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                sh './mvnw clean package'
+            }
+        }
+        stage('Create the Docker Image') {
+            when { branch "master" }
             steps {
                 sh '''
-                    docker build --no-cache -t  football-api .
-                    docker tag football-api:latest
+                    docker build --no-cache -t football-api .
                     docker rmi person:latest
                 '''
             }
-    }
-    stage('Run the Docker Container') {
-        when { branch "master" }
-        steps {
-            sh '''
-                    docker pull football-api:latest
+        }
+        stage('Run the Docker Container') {
+            when { branch "master" }
+            steps {
+                sh '''
+
+                    docker pull football-api
                     docker stop football-api
                     docker rm football-api
-                    docker run -p 9090:9090 --name football-api -t -d football-api
+                    docker run -p 9090:9090 --name person -t -d football-api
                     docker rmi -f $(docker images -q --filter dangling=true)
                 '''
             }
+        }
     }
 }
