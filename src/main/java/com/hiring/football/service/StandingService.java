@@ -66,7 +66,6 @@ public class StandingService {
             Map<String, String> map = objectMapper.readValue(standingPositionStr, Map.class);
             throw new InvalidLeagueException(map.get("message"));
         }
-
     }
 
 
@@ -79,10 +78,9 @@ public class StandingService {
     private String makeApiCall(String uri) throws RestClientException {
 
         //This API is common to get standing position and getting country id
+        log.info(uri);
         ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null, String.class);
         return responseEntity.getBody();
 
     }
-
-
 }
