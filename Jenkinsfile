@@ -11,27 +11,24 @@ pipeline {
                 sh 'chmod 775 *'
             }
         }
-stage('Cleanup') {
+        stage('Cleanup') {
             steps {
                 sh './mvnw clean'
             }
         }
 
-stage('Test') {
+        stage('Test') {
             steps {
                 sh './mvnw test'
             }
-            post {
-                always {
-                    junit 'build/test-results/test/*.xml'
-                }
-            }
         }
+
         stage('Build') {
             steps {
                 sh './mvnw clean package'
             }
         }
+
         stage('Create the Docker Image') {
             when { branch "master" }
             steps {
